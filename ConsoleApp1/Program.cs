@@ -5,10 +5,10 @@ class Program
 {
     static void Main(string[] args)
     {
-        //agregarEstudiante();
-        //consultarEstudiantes();
-        //consultarEstudiante();
-        //modificarEstudiante();
+        //agregarCliente();
+        //consultarClientes();
+        //consultarCliente();
+        //modificarCliente();
     }
 
     //agregar Cliente
