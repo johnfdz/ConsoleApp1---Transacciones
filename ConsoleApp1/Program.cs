@@ -6,71 +6,53 @@ class Program
     static void Main(string[] args)
     {
         //agregarCliente();
-        //consultarClientes();
-        //consultarCliente();
-        //modificarCliente();
     }
 
     //agregar Cliente
     public static void agregarCliente()
     {
         Console.WriteLine("Metodo agregar cliente");
-        ClienteContext context = new ClienteContext();
-        Cliente cli = new Cliente();
-        cli.Nombre = "Pedro";
-        cli.Apellido = "Perez";
-        cli.Direccion = "Calle 1";
-        cli.Telefono = "12345678";
-        cli.FechaNacimiento = "01/01/1990";
-        cli.Estado = "A";
-        context.Clientes.Add(cli);
-        context.SaveChanges();
-      
-        Console.WriteLine("Codigo: "+ cli.ClienteId + " Nombre: "+ cli.Nombre);
+            ClienteContext context = new ClienteContext();
+            Cliente cli = new Cliente();
+            Direccion dir = new Direccion();
+            Genero gen = new Genero();
+            var dbContextTransaction = context.Database.BeginTransaction();
 
-    }
-
-    public static void consultarClientes()
-    {
-        Console.WriteLine("Metodo consultar estudiantes");
-        ClienteContext context = new ClienteContext();
-        List<Cliente> listClientes= context.Clientes.ToList() ;
-
-        foreach (var item in listClientes)
+        try
         {
-            Console.WriteLine("Codigo: " + item.ClienteId + " Nombre: " + item.Nombre + " Apellido: "
-            + item.Apellido + "Direccion: " + item.Direccion);
-        }
-        
-    }
+            
 
-    public static void consultarCliente()
-    {
-        Console.WriteLine("Metodo consultar cliente por Id");
-        ClienteContext context = new ClienteContext();
-        Cliente cli = new Cliente();
-        cli = context.Clientes.Find(1);
+            dir.Nombre = "Calle 1";
+            dir.Estado = "A";
+            context.Direcciones.Add(dir);
+            context.SaveChanges();
 
-       Console.WriteLine("Codigo: " + cli.ClienteId + " Nombre: " + cli.Nombre);
+            gen.Nombre = "Masculino";
+            gen.Estado = "A";
+            context.Generos.Add(gen);
+            context.SaveChanges();
+            
+            cli.Nombre = "Pedro";
+            cli.Apellido = "Perez";
+            cli.Telefono = "12345678";
+            cli.DireccionId = dir.DireccionId;
+            cli.FechaNacimiento = "01/01/1990";
+            cli.GeneroId = gen.GeneroId;
+            cli.Estado = "A";
+            context.Clientes.Add(cli);
+            context.SaveChanges();
+
+            dbContextTransaction.Commit();
       
-    }
-
-    public static void modificarCliente()
-    {
-        Console.WriteLine("Metodo modificar cliente");
-        ClienteContext context = new ClienteContext();
-        Cliente cli = new Cliente();
-        cli = context.Clientes.Find(1);
-
-        cli.Nombre = "Alfredo";
-        cli.Apellido = "Poveda";
-        cli.Direccion = "Calle 1";
-        cli.Telefono = "12345678";
-        cli.FechaNacimiento = "01/01/1990";
-        cli.Estado = "A";
-        context.SaveChanges();
-        Console.WriteLine("Codigo: " + cli.ClienteId + " Nombre: " + cli.Nombre);
+            Console.WriteLine("Codigo: "+ cli.ClienteId + " Nombre: "+ cli.Nombre);
+        }
+        catch (Exception e)
+        {
+            dbContextTransaction.Rollback();
+            Console.WriteLine(e);
+            throw;
+        }
 
     }
-
+    
 }

@@ -12,6 +12,8 @@ namespace ConsoleApp1.Models
         public class ClienteContext : DbContext
         {
             public DbSet<Cliente> Clientes { get; set; }
+            public DbSet<Direccion> Direcciones { get; set; }
+            public DbSet<Genero> Generos { get; set; }
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
